@@ -9,7 +9,7 @@ library(gridExtra)
 #################################################################################################################
 
 # Read the csv with headers
-MyData <- read.csv("H:\\Predictive Analysis\\M405.csv", header = TRUE)
+MyData <- read.csv("H:\\Predictive Analysis\\M289.csv", header = TRUE)
 
 # Check the column names and the type of each field
 colnames(MyData)
@@ -19,8 +19,11 @@ str(MyData)
 MyData$Month <- NULL
 
 # Convert the following into numerics since they are appearing as factors
-MyData$Volume.BMO.Deposits <- as.numeric(MyData$Volume.BMO.Deposits)
-MyData$Total.Transaction <- as.numeric(MyData$Total.Transaction)
+MyData$Volume.BMO.Deposits <- as.double(MyData$Volume.BMO.Deposits)
+MyData$Total.Transaction <- as.double(MyData$Total.Transaction)
+MyData$Dollar.Value.BMO.Deposits <- as.double(MyData$Dollar.Value.BMO.Deposits)
+MyData$BMO.Cash.Tx.Volume <- as.double(MyData$BMO.Cash.Tx.Volume)
+MyData$BMO.Wd.Tx.Dollar.Value <- as.double(MyData$BMO.Wd.Tx.Dollar.Value)
 
 # Complete the data for missing values
 MyData <- MyData[complete.cases(MyData),]
@@ -33,6 +36,9 @@ MyData$Depository <- factor(ifelse(MyData$Depository == 0, "Pass", "Fail"))
 MyData$Dispenser <- factor(ifelse(MyData$Dispenser == 0, "Pass", "Fail"))
 MyData$Card.Reader <- factor(ifelse(MyData$Card.Reader == 0, "Pass", "Fail"))
 
+# Check the types again
+str(MyData)
+
 # Dividing into training Sets
 trainingSet <- MyData[1:150,2:6]
 trainingOutcomes <- MyData[1:150, 7]
@@ -42,7 +48,7 @@ testSet <- MyData[151:169, 2:6]
 testOutcomes <- MyData[151:169, 7]
 
 # Using k nearest neibhour to perform prediction
-predictions <- knn(train = trainingSet, cl = trainingOutcomes, k = 2,
+predictions <- knn(train = trainingSet, cl = trainingOutcomes, k = 0.5,
                    test = testSet)
 
 # Check the predictions
@@ -79,5 +85,5 @@ png("H:\\Predictive Analysis\\test.png")
 output <- tableGrob(y)
 grid.arrange(output)
 dev.off()
-
-
+predictions
+x
